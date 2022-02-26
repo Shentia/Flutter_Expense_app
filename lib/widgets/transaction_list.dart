@@ -9,49 +9,49 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 400,
-      child: ListView.builder(
-        itemBuilder: (ctx, index) {
-          return Card(
-              child: Row(
-            children: [
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blueGrey, width: 2),
+      height: 300,
+      child: transactions.isEmpty
+          ? Column(
+              children: [
+                Text('No Transaction Added yet.',
+                    style: Theme.of(context).textTheme.titleMedium),
+                SizedBox(
+                  height: 20,
                 ),
-                padding: EdgeInsets.all(10),
-                child: Text(
-                  // "\$" + transaction.amount.toString(),
-                  //both way is right
-                  '\$${transactions[index].amount.toStringAsFixed(2)}',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.blueGrey),
-                ),
-              ),
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(
-                  transactions[index].title,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      fontFamily: "verdana"),
-                ),
-                Text(
-                  DateFormat.yMMMd().format(transactions[index].date),
-                  style: TextStyle(
-                    color: Colors.grey,
+                Container(
+                    height: 200,
+                    child: Image.asset('assets/images/Logo-Trans.png',
+                        fit: BoxFit.cover)),
+              ],
+            )
+          : ListView.builder(
+              itemBuilder: (ctx, index) {
+                return Card(
+                  elevation: 2,
+                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 30,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: FittedBox(
+                          child: Text(
+                            '\$${transactions[index].amount}',
+                          ),
+                        ),
+                      ),
+                    ),
+                    title: Text(transactions[index].title,
+                        style: Theme.of(context).textTheme.headline6),
+                    subtitle: Text(
+                      DateFormat.yMMMEd().format(transactions[index].date),
+                    ),
                   ),
-                )
-              ])
-            ],
-          ));
-        },
-        itemCount: transactions.length,
-        // children: transactions.map((transaction) {}).toList(),
-      ),
+                );
+              },
+              itemCount: transactions.length,
+              // children: transactions.map((transaction) {}).toList(),
+            ),
     );
   }
 }
