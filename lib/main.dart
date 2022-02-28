@@ -14,13 +14,16 @@ class MyApp extends StatelessWidget {
       title: 'Personal Expenses',
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
-        accentColor: Colors.yellow,
+        accentColor: Color.fromARGB(255, 111, 59, 255),
+        errorColor: Colors.red,
+        fontFamily: 'OpenSans',
         textTheme: ThemeData.light().textTheme.copyWith(
-            titleMedium: TextStyle(
+              titleMedium: TextStyle(
                 fontFamily: 'OpenSans',
                 fontWeight: FontWeight.w700,
-                fontSize: 18)),
-        fontFamily: 'OpenSans',
+                fontSize: 18,
+              ),
+            ),
         appBarTheme: AppBarTheme(
           // toolbarTextStyle: ThemeData.light()
           //     .textTheme
@@ -76,11 +79,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _addNewTransaction(String transactionTitle, double transactionAmount) {
+  void _addNewTransaction(
+      String transactionTitle, double transactionAmount, DateTime chosenDate) {
     final newTransaction = Transaction(
       title: transactionTitle,
       amount: transactionAmount,
-      date: DateTime.now(),
+      date: chosenDate,
       id: DateTime.now().toString(),
     );
 
@@ -103,6 +107,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransactions.removeWhere((tx) => tx.id == id);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,7 +130,9 @@ class _MyHomePageState extends State<MyHomePage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Chart(_recentTransactions),
-          TransactionList(_userTransactions),
+          Expanded(
+            child: TransactionList(_userTransactions, _deleteTransaction),
+          ),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -130,6 +142,4 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-
-  void showModelBottomSheet() {}
 }
